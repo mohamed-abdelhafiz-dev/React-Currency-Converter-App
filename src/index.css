@@ -8,3 +8,8 @@
 @utility bg-main-bg {
   @apply bg-indigo-900
 }
+
+body
+{
+  background: #000;
+}
