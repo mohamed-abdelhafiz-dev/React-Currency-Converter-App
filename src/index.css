@@ -9,7 +9,8 @@
   @apply bg-indigo-900
 }
 
-body
-{
-  background: #000;
+html, body, #root, #app {
+  min-height: 100vh;
 }
+
+@plugin 'tailwind-scrollbar';

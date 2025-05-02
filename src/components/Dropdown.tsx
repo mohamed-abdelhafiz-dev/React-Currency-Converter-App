@@ -54,7 +54,7 @@ const Dropdown = ({ label, currency }: dropdownProps) => {
               <div className="relative inline-block text-left">
                 <button
                   onClick={() => setDropdownOpen(!dropdownOpen)}
-                  className={`cursor-pointer flex items-center rounded-[5px] px-5 py-[13px] text-lg font-semibold text-black border border-gray-400`}
+                  className={`cursor-pointer flex items-center rounded-[5px] px-5 py-[13px] text-md font-semibold text-black border border-gray-400`}
                 >
                   <div className="flex gap-2">
                     <img
@@ -63,7 +63,7 @@ const Dropdown = ({ label, currency }: dropdownProps) => {
                       )?.country.toLowerCase()}.png`}
                       alt=""
                     />
-                    <span>{selectedCurrency}</span>
+                    <span className="text-sm">{selectedCurrency}</span>
                   </div>
                   <span className="pl-4 ml-0.5 sm:ml-0">
                     <svg
@@ -122,7 +122,7 @@ const DropdownItem = ({
 }) => {
   return (
     <div
-      className="flex gap-2 bg-white border-b-[0.5px] border-b-gray-300 cursor-pointer py-3 px-3 text-lg font-semibold text-black/60 hover:text-black"
+      className="flex gap-2 bg-white border-b-[0.5px] border-b-gray-300 cursor-pointer py-3 px-3 text-sm font-semibold text-black/60 hover:text-black"
       onClick={() => {
         setter(currency.code);
         setDropdownOpen(false);

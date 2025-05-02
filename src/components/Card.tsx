@@ -15,13 +15,13 @@ function Card() {
 
   return (
     <div
-      className="bg-white w-full max-w-[550px] px-[30px] py-[35px]
+      className="bg-white w-full max-w-[500px] px-[30px] py-[35px]
                     rounded-[7px] shadow-md shadow-indigo-100"
     >
       <div className="flex flex-col">
-        <h1 className="text-center text-3xl font-bold">Currency Converter</h1>
+        <h1 className="text-center text-2xl font-bold">Currency Converter</h1>
         <div className="flex flex-col gap-2 mt-10">
-          <label htmlFor="amount" className="text-xl font-semibold">
+          <label htmlFor="amount" className="text-md font-semibold">
             Enter Amount
           </label>
           <input
@@ -29,19 +29,19 @@ function Card() {
             onChange={handleAmountInputChange}
             type="text"
             id="amount"
-            className="border border-gray-400 outline-none px-2 py-1.5 text-xl rounded-sm caret-main-bg"
+            className="border border-gray-400 outline-none px-2 py-1.5 text-lg rounded-sm caret-indigo-600"
           />
         </div>
         <div className="flex gap-2 sm:gap-0 justify-between items-center my-10 px-2">
           <div className="flex flex-col gap-2">
-            <span className="text-lg font-semibold">From</span>
+            <span className="text-md font-semibold">From</span>
             <Dropdown
               label="From"
               currency={{ fromCurrency, setFromCurrency }}
             />
           </div>
           <button
-            className="cursor-pointer self-end mb-4"
+            className="cursor-pointer self-end mb-3"
             onClick={() => {
               setFromCurrency(toCurrency);
               setToCurrency(fromCurrency);
@@ -51,9 +51,9 @@ function Card() {
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
-              strokeWidth={2.2}
+              strokeWidth={2}
               stroke="black"
-              className="size-8"
+              className="size-7"
             >
               <path
                 strokeLinecap="round"
@@ -63,11 +63,11 @@ function Card() {
             </svg>
           </button>
           <div className="flex flex-col gap-3">
-            <span className="text-lg font-semibold">To</span>
+            <span className="text-md font-semibold">To</span>
             <Dropdown label="To" currency={{ toCurrency, setToCurrency }} />
           </div>
         </div>
-        <p className="result text-lg font-semibold">{result}</p>
+        <p className="result text-md font-semibold">{result}</p>
         <button
           onClick={() => {
             setResult("Getting Exchange Rate...");
@@ -84,7 +84,7 @@ function Card() {
               });
           }}
           className="w-full bg-main-bg text-white py-2 px-3 mt-7 rounded-md 
-        cursor-pointer hover:bg-main-bg/90 text-lg font-[500]"
+        cursor-pointer hover:opacity-95 text-md font-[500]"
         >
           Get Exchange Rate
         </button>
