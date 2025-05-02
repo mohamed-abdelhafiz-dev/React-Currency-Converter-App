@@ -31,7 +31,7 @@ interface dropdownProps {
     toCurrency?: string;
     fromCurrency?: string;
     setFromCurrency?: (c: string) => void;
-    setToCurrency: (c: string) => void;
+    setToCurrency?: (c: string) => void;
   };
 }
 const Dropdown = ({ label, currency }: dropdownProps) => {
@@ -39,20 +39,10 @@ const Dropdown = ({ label, currency }: dropdownProps) => {
   const selectedCurrency = useMemo(() => {
     return label === "From" ? currency.fromCurrency : currency.toCurrency;
   }, [currency, label]);
-  console.log(selectedCurrency);
   const domNode = useClickOutside(() => {
     setDropdownOpen(false);
   });
 
-  useEffect(() => {
-    fetch(
-      `https://v6.exchangerate-api.com/v6/4690a7163cee1807c5fbd021/latest/${selectedCurrency}`
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data.conversion_rates);
-      });
-  }, []);
   return (
     <>
       {/* <!-- ====== Dropdowns Section Start --> */}
@@ -64,9 +54,8 @@ const Dropdown = ({ label, currency }: dropdownProps) => {
               <div className="relative inline-block text-left">
                 <button
                   onClick={() => setDropdownOpen(!dropdownOpen)}
-                  className={`flex items-center rounded-[5px] px-5 py-[13px] text-lg font-semibold text-black border border-gray-400`}
+                  className={`cursor-pointer flex items-center rounded-[5px] px-5 py-[13px] text-lg font-semibold text-black border border-gray-400`}
                 >
-                  {/* {label} */}
                   <div className="flex gap-2">
                     <img
                       src={`https://flagcdn.com/20x15/${Currencies.find(
@@ -76,7 +65,7 @@ const Dropdown = ({ label, currency }: dropdownProps) => {
                     />
                     <span>{selectedCurrency}</span>
                   </div>
-                  <span className="pl-4">
+                  <span className="pl-4 ml-0.5 sm:ml-0">
                     <svg
                       width={20}
                       height={20}
@@ -96,8 +85,17 @@ const Dropdown = ({ label, currency }: dropdownProps) => {
                       : "top-[110%] invisible opacity-0"
                   }`}
                 >
-                  {Currencies.map((currency) => (
-                    <DropdownItem key={currency.code} currency={currency} />
+                  {Currencies.map((c) => (
+                    <DropdownItem
+                      setDropdownOpen={setDropdownOpen}
+                      key={c.code}
+                      currency={c}
+                      setter={
+                        label === "From"
+                          ? currency.setFromCurrency!
+                          : currency.setToCurrency!
+                      }
+                    />
                   ))}
                 </div>
               </div>
@@ -115,14 +113,24 @@ export default Dropdown;
 
 const DropdownItem = ({
   currency,
+  setter,
+  setDropdownOpen,
 }: {
   currency: { code: string; country: string };
+  setter: (c: string) => void;
+  setDropdownOpen: (open:boolean) => void;
 }) => {
   return (
-    <div className="flex gap-2 bg-white border-b-[0.5px] border-b-gray-300 cursor-pointer py-3 px-3 text-lg font-semibold text-black/60 hover:text-black">
+    <div
+      className="flex gap-2 bg-white border-b-[0.5px] border-b-gray-300 cursor-pointer py-3 px-3 text-lg font-semibold text-black/60 hover:text-black"
+      onClick={() => {
+        setter(currency.code);
+        setDropdownOpen(false);
+      }}
+    >
       <img
         src={`https://flagcdn.com/16x12/${currency.country.toLowerCase()}.png`}
-        alt=""
+        alt={currency.country}
       />
       <span> {currency.code}</span>
     </div>

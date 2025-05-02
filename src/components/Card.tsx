@@ -2,19 +2,21 @@ import { useState } from "react";
 import Dropdown from "./Dropdown";
 
 function Card() {
-  const [amount, setAmount] = useState("");
+  const [amount, setAmount] = useState("1");
   const [fromCurrency, setFromCurrency] = useState("USD");
   const [toCurrency, setToCurrency] = useState("EGP");
+  const [result, setResult] = useState("1 USD = 50.81 EGP");
   function handleAmountInputChange(e: { target: { value: string } }) {
     if (isNaN(+e.target.value)) {
       return;
     }
     setAmount(e.target.value);
   }
+
   return (
     <div
-      className="bg-white w-full max-w-[600px] px-[30px] py-[35px]
-                    rounded-[7px]"
+      className="bg-white w-full max-w-[550px] px-[30px] py-[35px]
+                    rounded-[7px] shadow-md shadow-indigo-100"
     >
       <div className="flex flex-col">
         <h1 className="text-center text-3xl font-bold">Currency Converter</h1>
@@ -30,7 +32,7 @@ function Card() {
             className="border border-gray-400 outline-none px-2 py-1.5 text-xl rounded-sm caret-main-bg"
           />
         </div>
-        <div className="flex justify-between items-center my-10 px-2">
+        <div className="flex gap-2 sm:gap-0 justify-between items-center my-10 px-2">
           <div className="flex flex-col gap-2">
             <span className="text-lg font-semibold">From</span>
             <Dropdown
@@ -38,7 +40,13 @@ function Card() {
               currency={{ fromCurrency, setFromCurrency }}
             />
           </div>
-          <button className="cursor-pointer self-end mb-4">
+          <button
+            className="cursor-pointer self-end mb-4"
+            onClick={() => {
+              setFromCurrency(toCurrency);
+              setToCurrency(fromCurrency);
+            }}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -59,8 +67,22 @@ function Card() {
             <Dropdown label="To" currency={{ toCurrency, setToCurrency }} />
           </div>
         </div>
-        <p className="result text-lg font-semibold"> 1 USD = 52.3 EGP</p>
+        <p className="result text-lg font-semibold">{result}</p>
         <button
+          onClick={() => {
+            setResult("Getting Exchange Rate...");
+            fetch(
+              `https://v6.exchangerate-api.com/v6/4690a7163cee1807c5fbd021/latest/${fromCurrency}`
+            )
+              .then((res) => res.json())
+              .then((data) => {
+                setResult(
+                  `${+amount} ${fromCurrency} = ${(
+                    +amount * data.conversion_rates[toCurrency]
+                  ).toFixed(2)} ${toCurrency}`
+                );
+              });
+          }}
           className="w-full bg-main-bg text-white py-2 px-3 mt-7 rounded-md 
         cursor-pointer hover:bg-main-bg/90 text-lg font-[500]"
         >
