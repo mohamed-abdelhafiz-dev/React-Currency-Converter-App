@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+@theme {
+  --color-main-bg: #9A16AE
+}
+
+@utility flex-center {
+  @apply flex justify-center items-center
+}
+
+html{
+  overflow: hidden;
+}
