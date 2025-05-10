@@ -36,11 +36,13 @@ interface dropdownProps {
 }
 const Dropdown = ({ label, currency }: dropdownProps) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [currenciesState, setCurrenciesState] = useState(Currencies);
   const selectedCurrency = useMemo(() => {
     return label === "From" ? currency.fromCurrency : currency.toCurrency;
   }, [currency, label]);
   const domNode = useClickOutside(() => {
     setDropdownOpen(false);
+    setCurrenciesState(Currencies);
   });
 
   return (
@@ -53,7 +55,18 @@ const Dropdown = ({ label, currency }: dropdownProps) => {
             <div ref={domNode} className="text-center">
               <div className="relative inline-block text-left">
                 <button
-                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                  onClick={() => {
+                    setDropdownOpen(!dropdownOpen);
+                    setCurrenciesState(Currencies);
+                  }}
+                  onKeyDown={(e) => {
+                    const newCurrencies = Currencies.filter(
+                      (c) => c.code[0].toLowerCase() === e.key
+                    );
+                    if (newCurrencies.length) {
+                      setCurrenciesState(newCurrencies);
+                    }
+                  }}
                   className={`cursor-pointer flex items-center rounded-[5px] px-5 py-[13px] text-md font-semibold text-black border border-gray-400`}
                 >
                   <div className="flex gap-2">
@@ -85,9 +98,10 @@ const Dropdown = ({ label, currency }: dropdownProps) => {
                       : "top-[110%] invisible opacity-0"
                   }`}
                 >
-                  {Currencies.map((c) => (
+                  {currenciesState.map((c) => (
                     <DropdownItem
                       setDropdownOpen={setDropdownOpen}
+                      setCurrenciesState={setCurrenciesState}
                       key={c.code}
                       currency={c}
                       setter={
@@ -115,10 +129,12 @@ const DropdownItem = ({
   currency,
   setter,
   setDropdownOpen,
+  setCurrenciesState,
 }: {
   currency: { code: string; country: string };
   setter: (c: string) => void;
-  setDropdownOpen: (open:boolean) => void;
+  setDropdownOpen: (open: boolean) => void;
+  setCurrenciesState: (currencies: { code: string; country: string }[]) => void;
 }) => {
   return (
     <div
@@ -126,6 +142,7 @@ const DropdownItem = ({
       onClick={() => {
         setter(currency.code);
         setDropdownOpen(false);
+        setCurrenciesState(Currencies);
       }}
     >
       <img
